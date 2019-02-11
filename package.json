@@ -1,0 +1,45 @@
+{
+  "name": "difference-counter",
+  "version": "0.0.1",
+  "description": "compares two configuration files and shows a difference",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mika193/project-lvl2-s413.git"
+  },
+  "keywords": [
+    "difference-counter",
+    "counter",
+    "console-utils"
+  ],
+  "author": "mika193",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mika193/project-lvl2-s413/issues"
+  },
+  "homepage": "https://github.com/mika193/project-lvl2-s413#readme",
+  "bin": {
+    "gendiff": "dist/bin/gendiff.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  },
+  "dependencies": {
+    "commander": "^2.19.0"
+  }
+}
