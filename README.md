@@ -5,3 +5,6 @@
 
 # Установка пакета и вывод справки
 [![asciicast](https://asciinema.org/a/RJ99D8crIi84UtiImACP2KATV.svg)](https://asciinema.org/a/RJ99D8crIi84UtiImACP2KATV)
+
+# Поиск diff между двумя JSON
+[![asciicast](https://asciinema.org/a/MTijcPSQebEqu7bO39ADlQ3Ge.svg)](https://asciinema.org/a/MTijcPSQebEqu7bO39ADlQ3Ge)

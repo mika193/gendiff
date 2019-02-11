@@ -1,7 +1,8 @@
 env:
   node: true
+  jest: true
 
-parser: 
+parser:
   babel-eslint
 
 extends:
