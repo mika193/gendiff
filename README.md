@@ -8,3 +8,6 @@
 
 # Поиск diff между двумя JSON
 [![asciicast](https://asciinema.org/a/MTijcPSQebEqu7bO39ADlQ3Ge.svg)](https://asciinema.org/a/MTijcPSQebEqu7bO39ADlQ3Ge)
+
+# Поиск diff между двумя yaml
+[![asciicast](https://asciinema.org/a/CAL2rVtDghkPEyJ2sBUVfBt15.svg)](https://asciinema.org/a/CAL2rVtDghkPEyJ2sBUVfBt15)

@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import fs from 'fs';
+import path from 'path';
+import parse from './parsers';
 
 const findUniqKeys = (keys1, keys2) => {
   const filteredKeys2 = keys2.filter(el => !keys1.includes(el));
@@ -28,9 +30,15 @@ const compareObjects = (obj1, obj2) => {
   }, {});
 };
 
+const getObject = (filePath) => {
+  const file = fs.readFileSync(filePath);
+  const fileFormat = path.extname(filePath).split('.')[1];
+  return parse(file, fileFormat);
+};
+
 const genDiff = (path1, path2) => {
-  const obj1 = JSON.parse(fs.readFileSync(path1));
-  const obj2 = JSON.parse(fs.readFileSync(path2));
+  const obj1 = getObject(path1);
+  const obj2 = getObject(path2);
 
   const statusMap = {
     added: key => ` + ${key}: ${obj2[key]}`,
