@@ -1,14 +1,17 @@
 import _ from 'lodash';
 import fs from 'fs';
 
+const findUniqKeys = (keys1, keys2) => {
+  const filteredKeys2 = keys2.filter(el => !keys1.includes(el));
+  return keys1.concat(filteredKeys2);
+};
+
 const compareObjects = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
-  const newKeys = keys2.filter(el => !keys1.includes(el));
+  const uniqKeys = findUniqKeys(keys1, keys2);
 
-  const commonKeys = keys1.concat(newKeys);
-
-  return commonKeys.reduce((acc, key) => {
+  return uniqKeys.reduce((acc, key) => {
     if (!_.has(obj1, key)) {
       return { ...acc, [key]: 'added' };
     }

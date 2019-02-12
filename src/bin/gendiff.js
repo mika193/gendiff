@@ -1,6 +1,13 @@
 #!/usr/bin/env node
-import commander from '../commander';
+import commander from 'commander';
+import genDiff from '..';
 
-if (process.argv.includes('--help') || process.argv.includes('-h')) {
-  commander('help');
-}
+const program = commander;
+
+program
+  .version('0.0.1')
+  .description('Compares two configuration files and shows a difference.')
+  .option('-f, --format [type]', 'Output format')
+  .arguments('<firstConfig> <secondConfig>')
+  .action((path1, path2) => console.log(genDiff(path1, path2)))
+  .parse(process.argv);
