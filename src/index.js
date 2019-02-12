@@ -24,7 +24,7 @@ const compareObjects = (obj1, obj2) => {
 };
 
 const getObject = (filePath) => {
-  const file = fs.readFileSync(filePath);
+  const file = fs.readFileSync(filePath, 'utf-8');
   const fileFormat = path.extname(filePath).split('.')[1];
   return parse(file, fileFormat);
 };

@@ -5,21 +5,14 @@ describe('test genDiff', () => {
   const resultPath = '././__tests__/__fixtures__/result.txt';
   const result = fs.readFileSync(resultPath, 'utf-8');
 
-  const jsonTestParams = {
-    path1: '././__tests__/__fixtures__/before.json',
-    path2: '././__tests__/__fixtures__/after.json',
-  };
+  const fileTypes = ['json', 'yml', 'ini'];
 
-  const yamlTestParams = {
-    path1: '././__tests__/__fixtures__/before.yml',
-    path2: '././__tests__/__fixtures__/after.yml',
-  };
-
-  test('findig diff between JSON files', () => {
-    expect(genDiff(jsonTestParams.path1, jsonTestParams.path2)).toBe(result);
-  });
-
-  test('findig diff between yaml files', () => {
-    expect(genDiff(yamlTestParams.path1, yamlTestParams.path2)).toBe(result);
-  });
+  test.each(fileTypes)(
+    'findig diff between %s files',
+    (type) => {
+      const before = `././__tests__/__fixtures__/before.${type}`;
+      const after = `././__tests__/__fixtures__/after.${type}`;
+      expect(genDiff(before, after)).toBe(result);
+    },
+  );
 });

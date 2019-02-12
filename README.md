@@ -11,3 +11,6 @@
 
 # Поиск diff между двумя yaml
 [![asciicast](https://asciinema.org/a/CAL2rVtDghkPEyJ2sBUVfBt15.svg)](https://asciinema.org/a/CAL2rVtDghkPEyJ2sBUVfBt15)
+
+# Поиск diff между двумя ini
+[![asciicast](https://asciinema.org/a/dlQE6SC30rfFoD3uFc8GKZYmN.svg)](https://asciinema.org/a/dlQE6SC30rfFoD3uFc8GKZYmN)
