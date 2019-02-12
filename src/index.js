@@ -3,31 +3,24 @@ import fs from 'fs';
 import path from 'path';
 import parse from './parsers';
 
-const findUniqKeys = (keys1, keys2) => {
-  const filteredKeys2 = keys2.filter(el => !keys1.includes(el));
-  return keys1.concat(filteredKeys2);
-};
-
 const compareObjects = (obj1, obj2) => {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-  const uniqKeys = findUniqKeys(keys1, keys2);
+  const keys = _.union(Object.keys(obj1), Object.keys(obj2));
 
-  return uniqKeys.reduce((acc, key) => {
+  return keys.map((key) => {
     if (!_.has(obj1, key)) {
-      return { ...acc, [key]: 'added' };
+      return `  + ${key}: ${obj2[key]}`;
     }
 
     if (!_.has(obj2, key)) {
-      return { ...acc, [key]: 'deleted' };
+      return `  - ${key}: ${obj1[key]}`;
     }
 
     if (obj1[key] === obj2[key]) {
-      return { ...acc, [key]: 'changeless' };
+      return `   ${key}: ${obj1[key]}`;
     }
 
-    return { ...acc, [key]: 'changed' };
-  }, {});
+    return `  + ${key}: ${obj2[key]}\n  - ${key}: ${obj1[key]}`;
+  });
 };
 
 const getObject = (filePath) => {
@@ -39,21 +32,9 @@ const getObject = (filePath) => {
 const genDiff = (path1, path2) => {
   const obj1 = getObject(path1);
   const obj2 = getObject(path2);
+  const result = compareObjects(obj1, obj2).join('\n');
 
-  const statusMap = {
-    added: key => ` + ${key}: ${obj2[key]}`,
-    deleted: key => ` - ${key}: ${obj1[key]}`,
-    changeless: key => `  ${key}: ${obj1[key]}`,
-    changed: key => ` + ${key}: ${obj2[key]}\n  - ${key}: ${obj1[key]}`,
-  };
-
-  const compareResult = compareObjects(obj1, obj2);
-
-  const resultKeys = Object.keys(compareResult);
-
-  const result = resultKeys.reduce((acc, key) => `${acc} ${statusMap[compareResult[key]](key)}\n`, '');
-
-  return `{\n ${result}}`;
+  return `{\n ${result}\n}`;
 };
 
 export default genDiff;
