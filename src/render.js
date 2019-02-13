@@ -1,4 +1,4 @@
-const statusMap = {
+const typeMap = {
   added: '+ ',
   deleted: '- ',
   changeless: '  ',
@@ -36,14 +36,16 @@ const render = (ast) => {
   const iter = (tree, spaceCounter) => {
     const space = makeSpace(spaceCounter);
     const result = tree.map((el) => {
-      if (!el.children) {
-        if (el.status !== 'changed') {
-          return `${space}${statusMap[el.status]}${el.name}: ${stringify(el.value, spaceCounter)}`;
-        }
-        return `${space}${statusMap.added}${el.name}: ${stringify(el.value.to, spaceCounter)}\n${space}${statusMap.deleted}${el.name}: ${stringify(el.value.from, spaceCounter)}`;
+      if (el.type !== 'changed') {
+        const value = el.children.length > 0 ? `${iter(el.children, spaceCounter + textGap)}` : `${stringify(el.value, spaceCounter)}`;
+        const element = `${space}${typeMap[el.type]}${el.name}`;
+        return `${element}: ${value}`;
       }
-
-      return `${space}${statusMap[el.status]}${el.name}: ${iter(el.children, spaceCounter + textGap)}`;
+      const deletedElement = `${space}${typeMap.deleted}${el.name}`;
+      const addedElement = `${space}${typeMap.added}${el.name}`;
+      const valueTo = `${stringify(el.valueTo, spaceCounter)}`;
+      const valueFrom = `${stringify(el.valueFrom, spaceCounter)}`;
+      return `${addedElement}: ${valueTo}\n${deletedElement}: ${valueFrom}`;
     }).join('\n');
 
     return `{\n${result}\n${makeSpace(spaceCounter - braceGap)}}`;

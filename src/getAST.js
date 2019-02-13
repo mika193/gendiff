@@ -5,40 +5,47 @@ const getAST = (obj1, obj2) => {
 
   const result = keys.map((key) => {
     const name = key;
+    const children = [];
 
     if (!_.has(obj1, key)) {
       const value = obj2[key];
-      const status = 'added';
-      return { name, value, status };
+      const type = 'added';
+      return {
+        name, value, type, children,
+      };
     }
 
     if (!_.has(obj2, key)) {
       const value = obj1[key];
-      const status = 'deleted';
-      return { name, value, status };
+      const type = 'deleted';
+      return {
+        name, value, type, children,
+      };
     }
 
     if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
-      const status = 'changeless';
-      const children = getAST(obj1[key], obj2[key]);
+      const type = 'changeless';
+      const comparedChildren = getAST(obj1[key], obj2[key]);
       return {
-        name, value: '', status, children,
+        name, value: '', type, children: comparedChildren,
       };
     }
 
     if (obj1[key] === obj2[key]) {
-      const status = 'changeless';
+      const type = 'changeless';
       const value = obj1[key];
-      return { name, value, status };
+      return {
+        name, value, type, children,
+      };
     }
 
-    const status = 'changed';
-    const value = {
-      from: obj1[key],
-      to: obj2[key],
-    };
+    const type = 'changed';
+    const valueFrom = obj1[key];
+    const valueTo = obj2[key];
 
-    return { name, value, status };
+    return {
+      name, valueFrom, valueTo, type, children,
+    };
   });
 
   return result;
