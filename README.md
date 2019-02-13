@@ -14,3 +14,6 @@
 
 # Поиск diff между двумя ini
 [![asciicast](https://asciinema.org/a/dlQE6SC30rfFoD3uFc8GKZYmN.svg)](https://asciinema.org/a/dlQE6SC30rfFoD3uFc8GKZYmN)
+
+# Поиск diff между двумя рекурсивными структурами в формате json, yaml, ini
+[![asciicast](https://asciinema.org/a/klRIA4Urh4PDDvyAdDO8Cm0ax.svg)](https://asciinema.org/a/klRIA4Urh4PDDvyAdDO8Cm0ax)
