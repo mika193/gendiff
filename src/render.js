@@ -37,7 +37,10 @@ const render = (ast) => {
     const space = makeSpace(spaceCounter);
     const result = tree.map((el) => {
       if (!el.children) {
-        return `${space}${statusMap[el.status]}${el.name}: ${stringify(el.value, spaceCounter)}`;
+        if (el.status !== 'changed') {
+          return `${space}${statusMap[el.status]}${el.name}: ${stringify(el.value, spaceCounter)}`;
+        }
+        return `${space}${statusMap.added}${el.name}: ${stringify(el.value.to, spaceCounter)}\n${space}${statusMap.deleted}${el.name}: ${stringify(el.value.from, spaceCounter)}`;
       }
 
       return `${space}${statusMap[el.status]}${el.name}: ${iter(el.children, spaceCounter + textGap)}`;

@@ -7,57 +7,41 @@ const getAST = (obj1, obj2) => {
     const name = key;
 
     if (!_.has(obj1, key)) {
-      const type = typeof obj2[key];
       const value = obj2[key];
       const status = 'added';
-      return {
-        name, type, value, status,
-      };
+      return { name, value, status };
     }
 
     if (!_.has(obj2, key)) {
-      const type = typeof obj1[key];
       const value = obj1[key];
       const status = 'deleted';
-      return {
-        name, type, value, status,
-      };
+      return { name, value, status };
     }
 
     if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
       const status = 'changeless';
       const children = getAST(obj1[key], obj2[key]);
       return {
-        name, type: 'object', value: '', status, children,
+        name, value: '', status, children,
       };
     }
 
     if (obj1[key] === obj2[key]) {
       const status = 'changeless';
-      const type = typeof obj1[key];
       const value = obj1[key];
-      return {
-        name, type, value, status,
-      };
+      return { name, value, status };
     }
 
-    const status1 = 'deleted';
-    const status2 = 'added';
-    const type1 = typeof obj1[key];
-    const type2 = typeof obj2[key];
-    const value1 = obj1[key];
-    const value2 = obj2[key];
+    const status = 'changed';
+    const value = {
+      from: obj1[key],
+      to: obj2[key],
+    };
 
-    return [
-      {
-        name, status: status2, type: type2, value: value2,
-      },
-      {
-        name, status: status1, type: type1, value: value1,
-      }];
+    return { name, value, status };
   });
 
-  return _.flatten(result);
+  return result;
 };
 
 export default getAST;

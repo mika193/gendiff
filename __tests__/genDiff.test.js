@@ -11,7 +11,7 @@ describe('test genDiff', () => {
   const treeFileTypes = ['json', 'yml', 'ini'];
 
   test.each(flatFileTypes)(
-    'findig diff between flat %s files',
+    'findig diff between flat %s files. Show object',
     (type) => {
       const before = `././__tests__/__fixtures__/before.${type}`;
       const after = `././__tests__/__fixtures__/after.${type}`;
@@ -20,7 +20,7 @@ describe('test genDiff', () => {
   );
 
   test.each(treeFileTypes)(
-    'findig diff between tree %s files',
+    'findig diff between tree %s files. Show object',
     (type) => {
       const before = `././__tests__/__fixtures__/beforeTree.${type}`;
       const after = `././__tests__/__fixtures__/afterTree.${type}`;
