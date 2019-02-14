@@ -1,55 +1,41 @@
 import _ from 'lodash';
 
+const actions = [
+  {
+    type: 'added',
+    check: (obj1, obj2, key) => !_.has(obj1, key) && _.has(obj2, key),
+    process: (key, obj1, obj2) => ({ valueFrom: '', valueTo: obj2[key] }),
+  },
+  {
+    type: 'deleted',
+    check: (obj1, obj2, key) => _.has(obj1, key) && !_.has(obj2, key),
+    process: (key, obj1) => ({ valueFrom: obj1[key], valueTo: '' }),
+  },
+  {
+    type: 'nested',
+    check: (obj1, obj2, key) => typeof obj1[key] === 'object' && typeof obj2[key] === 'object',
+    process: (key, obj1, obj2, fn) => ({ valueFrom: '', valueTo: '', children: fn(obj1[key], obj2[key]) }),
+  },
+  {
+    type: 'same',
+    check: (obj1, obj2, key) => obj1[key] === obj2[key],
+    process: (key, obj1, obj2) => ({ valueFrom: obj1[key], valueTo: obj2[key] }),
+  },
+  {
+    type: 'changed',
+    check: (obj1, obj2, key) => _.has(obj1, key) && _.has(obj2, key) && obj1[key] !== obj2[key],
+    process: (key, obj1, obj2) => ({ valueFrom: obj1[key], valueTo: obj2[key] }),
+  },
+];
+
+const getAction = (obj1, obj2, key) => actions.find(({ check }) => check(obj1, obj2, key));
+
 const getAST = (obj1, obj2) => {
   const keys = _.union(Object.keys(obj1), Object.keys(obj2));
 
   const result = keys.map((key) => {
-    const name = key;
-
-    if (!_.has(obj1, key)) {
-      const valueFrom = '';
-      const valueTo = obj2[key];
-      const type = 'added';
-      return {
-        name, valueFrom, valueTo, type,
-      };
-    }
-
-    if (!_.has(obj2, key)) {
-      const valueTo = '';
-      const valueFrom = obj1[key];
-      const type = 'deleted';
-      return {
-        name, valueFrom, valueTo, type,
-      };
-    }
-
-    if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
-      const type = 'nested';
-      const children = getAST(obj1[key], obj2[key]);
-      const valueFrom = '';
-      const valueTo = '';
-      return {
-        name, valueFrom, valueTo, type, children,
-      };
-    }
-
-    if (obj1[key] === obj2[key]) {
-      const type = 'same';
-      const valueTo = obj1[key];
-      const valueFrom = obj2[key];
-      return {
-        name, valueFrom, valueTo, type,
-      };
-    }
-
-    const type = 'changed';
-    const valueFrom = obj1[key];
-    const valueTo = obj2[key];
-
-    return {
-      name, valueFrom, valueTo, type,
-    };
+    const { type, process } = getAction(obj1, obj2, key);
+    return { name: key, type, ...process(key, obj1, obj2, getAST) };
   });
 
   return result;
