@@ -1,21 +1,3 @@
-const typeMap = {
-  added: '+ ',
-  deleted: '- ',
-  changeless: '  ',
-};
-
-const makeSpace = (count) => {
-  const iter = (i, result) => {
-    if (i === 0) {
-      return result;
-    }
-
-    return ` ${iter(i - 1, result)}`;
-  };
-
-  return iter(count, '');
-};
-
 const stringify = (data, spaceCounter) => {
   const textGap = 6;
   const braceGap = 2;
@@ -24,34 +6,41 @@ const stringify = (data, spaceCounter) => {
     return data;
   }
 
-  const space = makeSpace(spaceCounter + textGap);
+  const space = ' '.repeat(spaceCounter + textGap);
   const keys = Object.keys(data);
   const result = keys.map(key => `${key}: ${data[key]}`).join('\n');
-  return `{\n${space}${result}\n${makeSpace(spaceCounter + braceGap)}}`;
+  return `{\n${space}${result}\n${' '.repeat(spaceCounter + braceGap)}}`;
 };
 
-const render = (ast) => {
-  const textGap = 4;
-  const braceGap = 2;
-  const iter = (tree, spaceCounter) => {
-    const space = makeSpace(spaceCounter);
-    const result = tree.map((el) => {
-      if (el.type !== 'changed') {
-        const value = el.children.length > 0 ? `${iter(el.children, spaceCounter + textGap)}` : `${stringify(el.value, spaceCounter)}`;
-        const element = `${space}${typeMap[el.type]}${el.name}`;
-        return `${element}: ${value}`;
-      }
-      const deletedElement = `${space}${typeMap.deleted}${el.name}`;
-      const addedElement = `${space}${typeMap.added}${el.name}`;
-      const valueTo = `${stringify(el.valueTo, spaceCounter)}`;
-      const valueFrom = `${stringify(el.valueFrom, spaceCounter)}`;
-      return `${addedElement}: ${valueTo}\n${deletedElement}: ${valueFrom}`;
-    }).join('\n');
+class RenderToObject {
+  constructor() {
+    this.textGap = 4;
+    this.braceGap = 2;
+    this.spaceCounter = 2;
+  }
 
-    return `{\n${result}\n${makeSpace(spaceCounter - braceGap)}}`;
-  };
+  added(el, spaceCounter = this.spaceCounter) {
+    return `${' '.repeat(spaceCounter)}+ ${el.name}: ${stringify(el.valueTo, spaceCounter)}`;
+  }
 
-  return iter(ast, 2);
-};
+  deleted(el, spaceCounter = this.spaceCounter) {
+    return `${' '.repeat(spaceCounter)}- ${el.name}: ${stringify(el.valueFrom, spaceCounter)}`;
+  }
 
-export default render;
+  changeless(el, spaceCounter = this.spaceCounter) {
+    const value = el.children.length > 0 ? `${this.iter(el.children, spaceCounter + this.textGap)}` : `${stringify(el.valueTo, spaceCounter)}`;
+    return `${' '.repeat(spaceCounter)}  ${el.name}: ${value}`;
+  }
+
+  changed(el, spaceCounter = this.spaceCounter) {
+    return `${this.added(el, spaceCounter)}\n${this.deleted(el, spaceCounter)}`;
+  }
+
+  iter(tree, spaceCounter = this.spaceCounter) {
+    const result = tree.map(el => this[el.type](el, spaceCounter)).join('\n');
+
+    return `{\n${result}\n${' '.repeat(spaceCounter - this.braceGap)}}`;
+  }
+}
+
+export default ast => new RenderToObject().iter(ast);
