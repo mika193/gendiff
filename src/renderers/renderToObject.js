@@ -10,17 +10,19 @@ const stringify = (data, depth, gap) => {
   return `{\n${space}${result}\n${' '.repeat(depth * gap)}}`;
 };
 
+const getString = (space, sign, name, valueParams) => `${space}${sign} ${name}: ${stringify(...valueParams)}`;
+
 const renderToObject = (tree, depth = 0) => {
   const braceGap = 2;
   const textGap = 4;
   const spaceLength = braceGap + depth * textGap;
   const space = ' '.repeat(spaceLength);
   const typeMap = {
-    added: ({ name, valueTo }) => `${space}+ ${name}: ${stringify(valueTo, depth + 1, textGap)}`,
+    added: ({ name, valueTo }) => getString(space, '+', name, [valueTo, depth + 1, textGap]),
 
-    deleted: ({ name, valueFrom }) => `${space}- ${name}: ${stringify(valueFrom, depth + 1, textGap)}`,
+    deleted: ({ name, valueFrom }) => getString(space, '-', name, [valueFrom, depth + 1, textGap]),
 
-    same: ({ name, valueTo }) => `${space}  ${name}: ${stringify(valueTo, depth + 1, textGap)}`,
+    same: ({ name, valueTo }) => getString(space, ' ', name, [valueTo, depth + 1, textGap]),
 
     nested: ({ children, name }) => `${space}  ${name}: ${renderToObject(children, depth + 1, textGap)}`,
 
