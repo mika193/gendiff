@@ -12,36 +12,25 @@ const stringify = (data, spaceCounter) => {
   return `{\n${space}${result}\n${' '.repeat(spaceCounter + braceGap)}}`;
 };
 
-export default class RenderToObject {
-  constructor() {
-    this.textGap = 4;
-    this.braceGap = 2;
-    this.spaceCounter = 2;
-  }
+const textGap = 4;
+const braceGap = 2;
 
-  added({ name, valueTo }, spaceCounter = this.spaceCounter) {
-    return `${' '.repeat(spaceCounter)}+ ${name}: ${stringify(valueTo, spaceCounter)}`;
-  }
+const renderToObject = (tree, spaceCounter = braceGap) => {
+  const typeMap = {
+    added: ({ name, valueTo }, spaceCount = braceGap) => `${' '.repeat(spaceCount)}+ ${name}: ${stringify(valueTo, spaceCount)}`,
 
-  deleted({ name, valueFrom }, spaceCounter = this.spaceCounter) {
-    return `${' '.repeat(spaceCounter)}- ${name}: ${stringify(valueFrom, spaceCounter)}`;
-  }
+    deleted: ({ name, valueFrom }, spaceCount = braceGap) => `${' '.repeat(spaceCount)}- ${name}: ${stringify(valueFrom, spaceCount)}`,
 
-  changeless({ name, valueTo }, spaceCounter = this.spaceCounter) {
-    return `${' '.repeat(spaceCounter)}  ${name}: ${stringify(valueTo, spaceCounter)}`;
-  }
+    changeless: ({ name, valueTo }, spaceCount = braceGap) => `${' '.repeat(spaceCount)}  ${name}: ${stringify(valueTo, spaceCount)}`,
 
-  nested({ children, name }, spaceCounter = this.spaceCounter) {
-    return `${' '.repeat(spaceCounter)}  ${name}: ${this.iter(children, spaceCounter + this.textGap)}`;
-  }
+    nested: ({ children, name }, spaceCount = braceGap) => `${' '.repeat(spaceCount)}  ${name}: ${renderToObject(children, spaceCount + textGap)}`,
 
-  changed(el, spaceCounter = this.spaceCounter) {
-    return `${this.added(el, spaceCounter)}\n${this.deleted(el, spaceCounter)}`;
-  }
+    changed: (el, spaceCount = braceGap) => `${typeMap.added(el, spaceCount)}\n${typeMap.deleted(el, spaceCount)}`,
+  };
 
-  iter(tree, spaceCounter = this.spaceCounter) {
-    const result = tree.map(el => this[el.type](el, spaceCounter)).join('\n');
+  const result = tree.map(el => typeMap[el.type](el, spaceCounter)).join('\n');
 
-    return `{\n${result}\n${' '.repeat(spaceCounter - this.braceGap)}}`;
-  }
-}
+  return `{\n${result}\n${' '.repeat(spaceCounter - braceGap)}}`;
+};
+
+export default renderToObject;

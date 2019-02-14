@@ -12,34 +12,20 @@ const stringify = (value) => {
   return `'${value}'`;
 };
 
-export default class RenderToPlain {
-  constructor() {
-    this.filePath = [];
-  }
+const renderToPlain = (tree, filePath = []) => {
+  const typeMap = {
+    added: ({ name, valueTo }, path = []) => `Property '${[...path, name].join('.')}' was added with value: ${stringify(valueTo)}`,
+    deleted: ({ name }, path = []) => `Property '${[...path, name].join('.')}' was removed`,
+    changed: ({ name, valueFrom, valueTo }, path = []) => `Property '${[...path, name].join('.')}' was updated. From ${stringify(valueFrom)} to ${stringify(valueTo)}`,
+    changeless: () => '',
+    nested: ({ children, name }, path = []) => `${renderToPlain(children, [...path, name])}`,
+  };
 
-  added({ name, valueTo }, filePath = this.filePath) {
-    return `Property '${[...filePath, name].join('.')}' was added with value: ${stringify(valueTo)}`;
-  }
+  const mapedTree = tree.map(el => typeMap[el.type](el, filePath));
+  const flattenTree = _.flatten(mapedTree);
+  const filteredTree = flattenTree.filter(el => el !== '');
+  const result = filteredTree.join('\n');
+  return result;
+};
 
-  deleted({ name }, filePath = this.filePath) {
-    return `Property '${[...filePath, name].join('.')}' was removed`;
-  }
-
-  changed({ name, valueFrom, valueTo }, filePath = this.filePath) {
-    return `Property '${[...filePath, name].join('.')}' was updated. From ${stringify(valueFrom)} to ${stringify(valueTo)}`;
-  }
-
-  changeless = () => '';
-
-  nested({ children, name }, filePath = this.filePath) {
-    return `${this.iter(children, [...filePath, name])}`;
-  }
-
-  iter(tree, filePath = this.filePath) {
-    const mapedTree = tree.map(el => this[el.type](el, filePath));
-    const flattenTree = _.flatten(mapedTree);
-    const filteredTree = flattenTree.filter(el => el !== '');
-    const result = filteredTree.join('\n');
-    return result;
-  }
-}
+export default renderToPlain;
