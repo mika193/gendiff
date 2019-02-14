@@ -12,24 +12,24 @@ const stringify = (data, spaceCounter) => {
   return `{\n${space}${result}\n${' '.repeat(spaceCounter + braceGap)}}`;
 };
 
-class RenderToObject {
+export default class RenderToObject {
   constructor() {
     this.textGap = 4;
     this.braceGap = 2;
     this.spaceCounter = 2;
   }
 
-  added(el, spaceCounter = this.spaceCounter) {
-    return `${' '.repeat(spaceCounter)}+ ${el.name}: ${stringify(el.valueTo, spaceCounter)}`;
+  added({ name, valueTo }, spaceCounter = this.spaceCounter) {
+    return `${' '.repeat(spaceCounter)}+ ${name}: ${stringify(valueTo, spaceCounter)}`;
   }
 
-  deleted(el, spaceCounter = this.spaceCounter) {
-    return `${' '.repeat(spaceCounter)}- ${el.name}: ${stringify(el.valueFrom, spaceCounter)}`;
+  deleted({ name, valueFrom }, spaceCounter = this.spaceCounter) {
+    return `${' '.repeat(spaceCounter)}- ${name}: ${stringify(valueFrom, spaceCounter)}`;
   }
 
-  changeless(el, spaceCounter = this.spaceCounter) {
-    const value = el.children.length > 0 ? `${this.iter(el.children, spaceCounter + this.textGap)}` : `${stringify(el.valueTo, spaceCounter)}`;
-    return `${' '.repeat(spaceCounter)}  ${el.name}: ${value}`;
+  changeless({ children, name, valueTo }, spaceCounter = this.spaceCounter) {
+    const value = children.length > 0 ? `${this.iter(children, spaceCounter + this.textGap)}` : `${stringify(valueTo, spaceCounter)}`;
+    return `${' '.repeat(spaceCounter)}  ${name}: ${value}`;
   }
 
   changed(el, spaceCounter = this.spaceCounter) {
@@ -42,5 +42,3 @@ class RenderToObject {
     return `{\n${result}\n${' '.repeat(spaceCounter - this.braceGap)}}`;
   }
 }
-
-export default ast => new RenderToObject().iter(ast);

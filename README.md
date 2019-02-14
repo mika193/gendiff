@@ -17,3 +17,6 @@
 
 # Поиск diff между двумя рекурсивными структурами в формате json, yaml, ini
 [![asciicast](https://asciinema.org/a/klRIA4Urh4PDDvyAdDO8Cm0ax.svg)](https://asciinema.org/a/klRIA4Urh4PDDvyAdDO8Cm0ax)
+
+# Вывод diff между двумя файлами в формате plain
+[![asciicast](https://asciinema.org/a/icQrUVF2boPwP1QZopSeYL0l7.svg)](https://asciinema.org/a/icQrUVF2boPwP1QZopSeYL0l7)
