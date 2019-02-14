@@ -1,5 +1,6 @@
 import RenderToObject from './RenderToObject';
 import RenderToPlain from './RenderToPlain';
+import RenderToJSON from './RenderToJSON';
 
 class Render {
   constructor(format) {
@@ -7,6 +8,7 @@ class Render {
     this.formatMap = {
       object: new RenderToObject(),
       plain: new RenderToPlain(),
+      json: new RenderToJSON(),
     };
   }
 

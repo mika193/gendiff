@@ -20,3 +20,6 @@
 
 # Вывод diff между двумя файлами в формате plain
 [![asciicast](https://asciinema.org/a/icQrUVF2boPwP1QZopSeYL0l7.svg)](https://asciinema.org/a/icQrUVF2boPwP1QZopSeYL0l7)
+
+# Вывод diff между двумя файлами в формате JSON
+[![asciicast](https://asciinema.org/a/UNgptOVh0qvti7iAWWF1t9k9f.svg)](https://asciinema.org/a/UNgptOVh0qvti7iAWWF1t9k9f)
