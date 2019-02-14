@@ -1,11 +1,10 @@
-import renderToObject from './renderToObject';
-import renderToPlain from './renderToPlain';
-import renderToJSON from './renderToJSON';
+import renderToObject from './renderers/renderToObject';
+import renderToPlain from './renderers/renderToPlain';
 
 const render = {
   object: renderToObject,
   plain: renderToPlain,
-  json: renderToJSON,
+  json: JSON.stringify,
 };
 
 export default (ast, format) => render[format](ast);

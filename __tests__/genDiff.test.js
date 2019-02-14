@@ -16,12 +16,6 @@ describe('test genDiff', () => {
   const plainTreeResultPath = '././__tests__/__fixtures__/resultPlainTree.txt';
   const plainTreeResult = fs.readFileSync(plainTreeResultPath, 'utf-8');
 
-  const jsonResultPath = '././__tests__/__fixtures__/resultJSON.txt';
-  const jsonResult = fs.readFileSync(jsonResultPath, 'utf-8');
-
-  const jsonTreeResultPath = '././__tests__/__fixtures__/resultTreeJSON.txt';
-  const jsonTreeResult = fs.readFileSync(jsonTreeResultPath, 'utf-8');
-
   test.each(flatFileTypes)(
     'findig diff between flat %s files. Show object',
     (type) => {
@@ -40,15 +34,6 @@ describe('test genDiff', () => {
     },
   );
 
-  test.each(flatFileTypes)(
-    'findig diff between flat %s files. Show JSON',
-    (type) => {
-      const before = `././__tests__/__fixtures__/before.${type}`;
-      const after = `././__tests__/__fixtures__/after.${type}`;
-      expect(genDiff(before, after, 'json')).toBe(jsonResult);
-    },
-  );
-
   test.each(treeFileTypes)(
     'findig diff between tree %s files. Show object',
     (type) => {
@@ -64,15 +49,6 @@ describe('test genDiff', () => {
       const before = `././__tests__/__fixtures__/beforeTree.${type}`;
       const after = `././__tests__/__fixtures__/afterTree.${type}`;
       expect(genDiff(before, after, 'plain')).toBe(plainTreeResult);
-    },
-  );
-
-  test.each(treeFileTypes)(
-    'findig diff between tree %s files. Show JSON',
-    (type) => {
-      const before = `././__tests__/__fixtures__/beforeTree.${type}`;
-      const after = `././__tests__/__fixtures__/afterTree.${type}`;
-      expect(genDiff(before, after, 'json')).toBe(jsonTreeResult);
     },
   );
 });
