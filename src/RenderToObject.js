@@ -27,9 +27,12 @@ export default class RenderToObject {
     return `${' '.repeat(spaceCounter)}- ${name}: ${stringify(valueFrom, spaceCounter)}`;
   }
 
-  changeless({ children, name, valueTo }, spaceCounter = this.spaceCounter) {
-    const value = children.length > 0 ? `${this.iter(children, spaceCounter + this.textGap)}` : `${stringify(valueTo, spaceCounter)}`;
-    return `${' '.repeat(spaceCounter)}  ${name}: ${value}`;
+  changeless({ name, valueTo }, spaceCounter = this.spaceCounter) {
+    return `${' '.repeat(spaceCounter)}  ${name}: ${stringify(valueTo, spaceCounter)}`;
+  }
+
+  nested({ children, name }, spaceCounter = this.spaceCounter) {
+    return `${' '.repeat(spaceCounter)}  ${name}: ${this.iter(children, spaceCounter + this.textGap)}`;
   }
 
   changed(el, spaceCounter = this.spaceCounter) {

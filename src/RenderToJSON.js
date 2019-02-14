@@ -13,10 +13,12 @@ export default class RenderToPlain {
 
   changed = ({ name, valueFrom, valueTo }) => ({ [`+ ${name}`]: normalizeData(valueTo), [`- ${name}`]: normalizeData(valueFrom) });
 
-  changeless({ children, name, valueTo }) {
-    const value = children.length > 0 ? JSON.parse(this.iter(children)) : normalizeData(valueTo);
-    return { [name]: value };
+  changeless = ({ name, valueTo }) => ({ [name]: normalizeData(valueTo) });
+
+  nested({ children, name }) {
+    return { [name]: JSON.parse(this.iter(children)) };
   }
+
 
   iter = (tree) => {
     const reducedTree = tree.reduce((acc, el) => ({ ...acc, ...this[el.type](el) }), {});

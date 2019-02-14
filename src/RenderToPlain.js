@@ -29,8 +29,10 @@ export default class RenderToPlain {
     return `Property '${[...filePath, name].join('.')}' was updated. From ${stringify(valueFrom)} to ${stringify(valueTo)}`;
   }
 
-  changeless({ children, name }, filePath = this.filePath) {
-    return children.length > 0 ? `${this.iter(children, [...filePath, name])}` : '';
+  changeless = () => '';
+
+  nested({ children, name }, filePath = this.filePath) {
+    return `${this.iter(children, [...filePath, name])}`;
   }
 
   iter(tree, filePath = this.filePath) {

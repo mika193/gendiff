@@ -26,7 +26,7 @@ const getAST = (obj1, obj2) => {
     }
 
     if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
-      const type = 'changeless';
+      const type = 'nested';
       const comparedChildren = getAST(obj1[key], obj2[key]);
       return {
         name, valueFrom, valueTo, type, children: comparedChildren,
