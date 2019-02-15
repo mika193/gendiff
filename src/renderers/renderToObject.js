@@ -1,3 +1,5 @@
+import _ from 'lodash/fp';
+
 const stringify = (data, depth, gap) => {
   const space = ' '.repeat(gap + depth * gap);
 
@@ -26,10 +28,12 @@ const renderToObject = (tree, depth = 0) => {
 
     nested: ({ children, name }) => `${space}  ${name}: ${renderToObject(children, depth + 1, textGap)}`,
 
-    changed: el => `${typeMap.added(el)}\n${typeMap.deleted(el)}`,
+    changed: el => [typeMap.added(el), typeMap.deleted(el)],
   };
 
-  const result = tree.map(el => typeMap[el.type](el)).join('\n');
+  const mapedTree = tree.map(el => typeMap[el.type](el));
+  const flattenTree = _.flatten(mapedTree);
+  const result = flattenTree.join('\n');
 
   return `{\n${result}\n${' '.repeat(spaceLength - braceGap)}}`;
 };

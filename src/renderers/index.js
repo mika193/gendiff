@@ -1,5 +1,5 @@
-import renderToObject from './renderers/renderToObject';
-import renderToPlain from './renderers/renderToPlain';
+import renderToObject from './renderToObject';
+import renderToPlain from './renderToPlain';
 
 const render = {
   object: renderToObject,
