@@ -12,11 +12,11 @@
 
 ## Пример использования:
 
-$ gendiff --format plain first-config.ini second-config.ini
-Property 'timeout' was updated. From 50 to 20
-Property 'proxy' was removed
-Property 'follow' was removed
-Property 'verbose' was added with value: true
+$ gendiff --format plain first-config.ini second-config.ini  
+Property 'timeout' was updated. From 50 to 20  
+Property 'proxy' was removed  
+Property 'follow' was removed  
+Property 'verbose' was added with value: true  
 
 
 ### Установка пакета и вывод справки
